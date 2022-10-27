@@ -22,6 +22,7 @@ public class ErrorHandler {
                 e.getMessage()
         );
     }
+
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse itemNotFoundException(final ItemNotFoundException e) {
@@ -29,9 +30,10 @@ public class ErrorHandler {
                 e.getMessage()
         );
     }
+
     @ExceptionHandler
     @ResponseStatus(HttpStatus.FORBIDDEN)
-    public ErrorResponse noAccessException (final NoAccessException e) {
+    public ErrorResponse noAccessException(final NoAccessException e) {
         return new ErrorResponse("Нет доступа к предмету " +
                 e.getMessage()
         );
@@ -39,7 +41,7 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ErrorResponse WhoUseEmailOrNameException (final WhoUseEmailOrNameException e) {
+    public ErrorResponse WhoUseEmailOrNameException(final WhoUseEmailOrNameException e) {
         return new ErrorResponse("Кто-то использует email или имя " +
                 e.getMessage()
         );
