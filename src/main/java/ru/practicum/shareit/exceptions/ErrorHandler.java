@@ -41,7 +41,7 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ErrorResponse WhoUseEmailOrNameException(final WhoUseEmailOrNameException e) {
+    public ErrorResponse whoUseEmailOrNameException(final WhoUseEmailOrNameException e) {
         return new ErrorResponse("Кто-то использует email или имя " +
                 e.getMessage()
         );
