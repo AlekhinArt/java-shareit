@@ -21,10 +21,6 @@ public class UserInMemoryStorage implements UserStorage {
 
     @Override
     public Collection<User> getAllUsers() {
-//        Collection<UserDto> usersDto = new ArrayList<>();
-//        for (User user : users.values()) {
-//            usersDto.add(UserMapper.toUserDto(user));
-//        }
         return users.values();
     }
 

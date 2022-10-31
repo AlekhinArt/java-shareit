@@ -2,8 +2,9 @@ package ru.practicum.shareit.user.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.practicum.shareit.exceptions.AnybodyUseEmailException;
 import ru.practicum.shareit.exceptions.UserNotFoundException;
-import ru.practicum.shareit.exceptions.WhoUseEmailOrNameException;
+import ru.practicum.shareit.exceptions.AnybodyUseNameException;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.mapper.UserMapper;
 import ru.practicum.shareit.user.model.User;
@@ -58,9 +59,11 @@ public class UserServiceImpl implements UserService {
     private void checkUser(User user) {
         Collection<User> oldUsers = userStorage.getAllUsers();
         for (User oldUser : oldUsers) {
-            if (oldUser.getName().equals(user.getName())
-                    || oldUser.getEmail().equals(user.getEmail())) {
-                throw new WhoUseEmailOrNameException("Занято");
+            if (oldUser.getName().equals(user.getName())) {
+                throw new AnybodyUseNameException("Имя занято");
+            }
+            if (oldUser.getEmail().equals(user.getEmail())) {
+                throw new AnybodyUseEmailException("Email уже занят");
             }
         }
     }

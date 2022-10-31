@@ -41,9 +41,13 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ErrorResponse whoUseEmailOrNameException(final WhoUseEmailOrNameException e) {
-        return new ErrorResponse("Кто-то использует email или имя " +
-                e.getMessage()
-        );
+    public ErrorResponse anybodyUseNameException(final AnybodyUseNameException e) {
+        return new ErrorResponse(e.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ErrorResponse anybodyUseEmailException(final AnybodyUseEmailException e) {
+        return new ErrorResponse(e.getMessage());
     }
 }
