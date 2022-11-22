@@ -5,7 +5,6 @@ import ru.practicum.shareit.user.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class UserMapper {
 
@@ -17,7 +16,7 @@ public class UserMapper {
         );
     }
 
-    public static User DtoToUser(UserDto userDto) {
+    public static User dtoToUser(UserDto userDto) {
         return new User(
                 userDto.getId(),
                 userDto.getName(),

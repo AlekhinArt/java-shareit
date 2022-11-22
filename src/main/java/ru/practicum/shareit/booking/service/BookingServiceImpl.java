@@ -155,7 +155,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     private User getUser(long userId) {
-        return UserMapper.DtoToUser(userService.getUser(userId));
+        return UserMapper.dtoToUser(userService.getUser(userId));
     }
 
     private Item getItem(Long itemId) {
