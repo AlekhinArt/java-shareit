@@ -33,7 +33,7 @@ public class BookingServiceImpl implements BookingService {
         System.out.println();
         Item item = getItem(bookingDto.getItemId());
         User user = getUser(userId);
-        if (userId == item.getOwnerId()) {
+        if (userId.equals(item.getOwnerId())) {
             throw new ItemNotFoundException("Ошибка! Нельзя забронировать свою вещь!");
         }
         if (!item.getAvailable()) {
@@ -54,7 +54,7 @@ public class BookingServiceImpl implements BookingService {
         Booking booking = getBooking(bookingId);
         Item item = booking.getItem();
         User user = getUser(userId);
-        if (item.getOwnerId() != userId) {
+        if (!item.getOwnerId().equals(userId)) {
             throw new BookingNotFoundException("Подтверждать статус может только создатель бронирования");
         }
         if (booking.getBookingStatus() == BookingStatus.APPROVED) {
@@ -69,7 +69,7 @@ public class BookingServiceImpl implements BookingService {
         Booking booking = getBooking(bookingId);
         Item item = booking.getItem();
         User user = booking.getBooker();
-        if (user.getId() != userId && item.getOwnerId() != userId) {
+        if (!user.getId().equals(userId) && !item.getOwnerId().equals(userId)) {
             throw new BookingNotFoundException("Нет доступа");
         }
         return BookingMapper.toBookingDtoWithUserAndItem(booking);
@@ -77,7 +77,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public Collection<BookingDtoWithUserAndItem> getBookingsUser(String stateString, Long userId) {
-        if (getUser(userId) == null) throw new UserNotFoundException("Такого пользователя нет");
+        if (getUser(userId).getId() == null) throw new UserNotFoundException("Такого пользователя нет");
         if (Arrays.stream(BookingState.values()).noneMatch((t) -> t.name().equals(stateString))) {
             throw new UnsupportedStatusException(stateString);
         }
@@ -117,7 +117,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public Collection<BookingDtoWithUserAndItem> getBookingsItemOwner(String stateString, Long ownerId) {
-        if (getUser(ownerId) == null) throw new UserNotFoundException("Такого пользователя нет");
+        if (getUser(ownerId).getId() == null) throw new UserNotFoundException("Такого пользователя нет");
         if (Arrays.stream(BookingState.values()).noneMatch((t) -> t.name().equals(stateString))) {
             throw new UnsupportedStatusException(stateString);
         }
@@ -155,6 +155,8 @@ public class BookingServiceImpl implements BookingService {
     }
 
     private User getUser(long userId) {
+        userService.getUser(userId);
+
         return UserMapper.dtoToUser(userService.getUser(userId));
     }
 

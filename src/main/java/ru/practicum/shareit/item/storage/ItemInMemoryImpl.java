@@ -21,7 +21,6 @@ public class ItemInMemoryImpl implements ItemStorage {
     @Override
     public Item addNewItem(long userId, Item item) {
         item.setId(getId());
-//        item.setOwner(userStorage.getUser(userId));
         items.put(item.getId(), item);
         List<Long> abc = new ArrayList<>();
         abc.add(item.getId());
@@ -36,8 +35,6 @@ public class ItemInMemoryImpl implements ItemStorage {
             if (item.getName() == null) item.setName(oldItem.getName());
             if (item.getDescription() == null) item.setDescription(oldItem.getDescription());
             if (item.getAvailable() == null) item.setAvailable(oldItem.getAvailable());
-//            item.setOwner(oldItem.getOwner());
-//            item.setRequest(oldItem.getRequest());
             item.setId(itemId);
             items.put(itemId, item);
             return item;

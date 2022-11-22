@@ -45,7 +45,7 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
     }
 
     private ItemDto addBookings(Long userId, ItemDto itemDto) {
-        if (userId == itemDto.getOwnerId()) {
+        if (userId.equals(itemDto.getOwnerId())) {
             List<BookingDtoForItem> bookings = getBooking(itemDto.getId());
             if (bookings.size() > 1) {
                 itemDto.setLastBooking(bookings.get(0));
