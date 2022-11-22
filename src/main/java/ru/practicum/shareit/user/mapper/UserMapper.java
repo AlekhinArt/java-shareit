@@ -17,7 +17,7 @@ public class UserMapper {
         );
     }
 
-    public static User DtoToUser (UserDto userDto) {
+    public static User DtoToUser(UserDto userDto) {
         return new User(
                 userDto.getId(),
                 userDto.getName(),
@@ -30,14 +30,7 @@ public class UserMapper {
         for (User user : users) {
             result.add(toUserDto(user));
         }
-
         return result;
     }
 
-    public static UserDto toUserDto(Optional<User> user) {
-        return new UserDto(user.get().getId(),
-                user.get().getName(),
-                user.get().getEmail());
-
-    }
 }

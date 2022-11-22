@@ -1,6 +1,5 @@
 package ru.practicum.shareit.item.storage;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import ru.practicum.shareit.exceptions.NoAccessException;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.storage.UserStorage;

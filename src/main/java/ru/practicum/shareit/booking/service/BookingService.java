@@ -8,8 +8,12 @@ import java.util.Collection;
 public interface BookingService {
 
     BookingDtoWithUserAndItem createBooking(BookingDto booking, Long userId);
+
     BookingDtoWithUserAndItem approvalBooking(Boolean approved, Long userId, Long bookingId);
-    BookingDtoWithUserAndItem getBooking (Long userId, Long bookingId);
+
+    BookingDtoWithUserAndItem getBooking(Long userId, Long bookingId);
+
     Collection<BookingDtoWithUserAndItem> getBookingsUser(String state, Long userId);
-    Collection<BookingDtoWithUserAndItem> getBookingsItemOwner (String state, Long ownerId);
+
+    Collection<BookingDtoWithUserAndItem> getBookingsItemOwner(String state, Long ownerId);
 }
