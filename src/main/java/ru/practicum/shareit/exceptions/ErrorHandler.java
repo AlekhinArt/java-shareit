@@ -50,4 +50,21 @@ public class ErrorHandler {
     public ErrorResponse anybodyUseEmailException(final AnybodyUseEmailException e) {
         return new ErrorResponse(e.getMessage());
     }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse bookingNotFoundException(final BookingNotFoundException e) {
+        return new ErrorResponse("Бронирование не найдено " +
+                e.getMessage()
+        );
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse unsupportedStatusException(final UnsupportedStatusException e) {
+        return new ErrorResponse("Unknown state: " +
+                e.getMessage()
+        );
+    }
+
 }
