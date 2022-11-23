@@ -6,7 +6,6 @@ import ru.practicum.shareit.user.storage.UserStorage;
 
 import java.util.*;
 
-
 public class ItemInMemoryImpl implements ItemStorage {
 
     private final UserStorage userStorage;

@@ -9,8 +9,7 @@ import ru.practicum.shareit.comment.dto.CommentDtoResponse;
 import ru.practicum.shareit.comment.mapper.CommentMapper;
 import ru.practicum.shareit.comment.model.Comment;
 import ru.practicum.shareit.comment.repository.CommentRepository;
-import ru.practicum.shareit.exceptions.ItemNotFoundException;
-import ru.practicum.shareit.exceptions.UserNotFoundException;
+import ru.practicum.shareit.exceptions.NotFoundException;
 import ru.practicum.shareit.exceptions.ValidationException;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.mapper.ItemMapper;
@@ -50,9 +49,9 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public ItemDto updateItem(Item item, long userId, long itemId) {
         Item oldItem = itemRepository.findById(itemId)
-                .orElseThrow(() -> new ItemNotFoundException("Такого предмета нет"));
+                .orElseThrow(() -> new NotFoundException("Такого предмета нет"));
         if (oldItem.getOwnerId() == null || oldItem.getOwnerId() != userId)
-            throw new ItemNotFoundException("Не владелец = нет прав");
+            throw new NotFoundException("Не владелец = нет прав");
         checkUser(userId);
         item.setOwnerId(userId);
         if (item.getName() == null) item.setName(oldItem.getName());
@@ -85,7 +84,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public CommentDtoResponse addComment(long userId, long itemId, CommentDto commentDto) {
         Item item = itemRepository.findById(itemId)
-                .orElseThrow(() -> new ItemNotFoundException("Нет предмета с таким id"));
+                .orElseThrow(() -> new NotFoundException("Нет предмета с таким id"));
         checkUser(userId);
         List<Booking> booking = bookingRepository.findAllByBooker_IdAndItem_IdAndEndBeforeOrderByStartDesc(userId, itemId, LocalDateTime.now());
         if (booking == null || booking.size() == 0) {
@@ -102,7 +101,7 @@ public class ItemServiceImpl implements ItemService {
 
     private void checkUser(long userId) {
         if (userId == 0) throw new ValidationException("Не задан пользователь");
-        if (userRepository.findById(userId).isEmpty()) throw new UserNotFoundException("Пользователя нет");
+        if (userRepository.findById(userId).isEmpty()) throw new NotFoundException("Пользователь не найден");
     }
 
 }

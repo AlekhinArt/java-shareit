@@ -1,6 +1,7 @@
 package ru.practicum.shareit.item.repository;
 
 import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Repository;
 import ru.practicum.shareit.booking.dto.BookingDtoForItem;
 import ru.practicum.shareit.booking.model.BookingStatus;
 import ru.practicum.shareit.booking.repository.BookingRepository;
@@ -8,7 +9,7 @@ import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.comment.mapper.CommentMapper;
 import ru.practicum.shareit.comment.model.Comment;
 import ru.practicum.shareit.comment.repository.CommentRepository;
-import ru.practicum.shareit.exceptions.ItemNotFoundException;
+import ru.practicum.shareit.exceptions.NotFoundException;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.mapper.ItemMapper;
 
@@ -17,7 +18,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
+@Repository
 public class ItemRepositoryImpl implements ItemRepositoryCustom {
     private final BookingRepository bookingRepository;
     private final CommentRepository commentRepository;
@@ -33,7 +34,7 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
     @Override
     public ItemDto getByIdForResponse(long userId, long id) {
         ItemDto itemDto = ItemMapper.toItemDto(itemRepository.findById(id)
-                .orElseThrow(() -> new ItemNotFoundException("Нет такого предмета")));
+                .orElseThrow(() -> new NotFoundException("Нет такого предмета")));
         List<Comment> comments = commentRepository.findAllByItem_Id(id);
         if (comments.isEmpty()) {
             itemDto.setComments(Collections.emptyList());
