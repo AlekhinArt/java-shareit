@@ -17,17 +17,9 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse userNotFoundException(final UserNotFoundException e) {
-        return new ErrorResponse("Пользователь не найден " +
-                e.getMessage()
-        );
-    }
+    public ErrorResponse notFoundException(final NotFoundException e) {
+        return new ErrorResponse(e.getMessage()
 
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse itemNotFoundException(final ItemNotFoundException e) {
-        return new ErrorResponse("Предмет не найден " +
-                e.getMessage()
         );
     }
 
@@ -41,13 +33,16 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ErrorResponse anybodyUseNameException(final AnybodyUseNameException e) {
-        return new ErrorResponse(e.getMessage());
+    public ErrorResponse anybodyUseEmailOrNameException(final AnybodyUseEmailOrNameException e) {
+        return new ErrorResponse("Кто-то уже использует " + e.getMessage());
     }
 
     @ExceptionHandler
-    @ResponseStatus(HttpStatus.CONFLICT)
-    public ErrorResponse anybodyUseEmailException(final AnybodyUseEmailException e) {
-        return new ErrorResponse(e.getMessage());
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse unsupportedStatusException(final UnsupportedStatusException e) {
+        return new ErrorResponse("Unknown state: " +
+                e.getMessage()
+        );
     }
+
 }

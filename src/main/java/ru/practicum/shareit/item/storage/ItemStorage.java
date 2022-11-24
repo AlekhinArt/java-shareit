@@ -1,11 +1,10 @@
 package ru.practicum.shareit.item.storage;
 
-import org.springframework.stereotype.Component;
 import ru.practicum.shareit.item.model.Item;
 
 import java.util.Collection;
 
-@Component
+
 public interface ItemStorage {
     Item addNewItem(long userId, Item item);
 
