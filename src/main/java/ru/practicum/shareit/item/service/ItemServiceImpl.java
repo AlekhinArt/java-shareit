@@ -1,6 +1,9 @@
 package ru.practicum.shareit.item.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.repository.BookingRepository;
@@ -68,17 +71,21 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public Collection<ItemDto> getItemsCreator(long userId) {
+    public Collection<ItemDto> getItemsCreator(long userId, int from, int size) {
         checkUser(userId);
-        return itemRepository.findIdByOwner(userId).stream().map(id
+        checkPageParam(from, size);
+        Pageable pageable = PageRequest.of(from / size, size);
+        return itemRepository.findIdByOwner(userId, pageable).stream().map(id
                 -> itemRepository.getByIdForResponse(userId, id)).collect(Collectors.toList());
     }
 
     @Override
-    public Collection<ItemDto> findItem(String description, long userId) {
+    public Collection<ItemDto> findItem(String description, long userId, int from, int size) {
         if (description.isBlank() || description.isEmpty()) return new ArrayList<>();
-        checkUser(userId);
-        return ItemMapper.mapToItemDto(itemRepository.search(description));
+        checkPageParam(from, size);
+        //checkUser(userId);
+        Pageable pageable = PageRequest.of(from / size, size);
+        return ItemMapper.mapToItemDto(itemRepository.search(description, pageable));
     }
 
     @Override
@@ -97,6 +104,15 @@ public class ItemServiceImpl implements ItemService {
                 .created(LocalDateTime.now())
                 .build();
         return CommentMapper.toCommentDtoResponse(commentRepository.save(comment));
+    }
+
+    private void checkPageParam(int from, int size) {
+        if (from < 0) {
+            throw new ValidationException("Индекс первого элемента должен быть больше 0");
+        }
+        if (size <= 0) {
+            throw new ValidationException("Количество предметов должно быть больше 0");
+        }
     }
 
     private void checkUser(long userId) {

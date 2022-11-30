@@ -1,5 +1,6 @@
 package ru.practicum.shareit.item.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import ru.practicum.shareit.booking.dto.BookingDtoForItem;
 import ru.practicum.shareit.comment.dto.CommentDtoResponse;
@@ -7,9 +8,6 @@ import ru.practicum.shareit.comment.dto.CommentDtoResponse;
 import java.util.List;
 
 
-/**
- * TODO Sprint add-controllers.
- */
 @Setter
 @Getter
 @AllArgsConstructor
@@ -19,9 +17,11 @@ public class ItemDto {
     private Long id;
     private String name;
     private String description;
+    @JsonProperty("owner")
     private Long ownerId;
     private Boolean available;
-    private long request;
+    @JsonProperty("requestId")
+    private Long requestId;
     private BookingDtoForItem lastBooking;
     private BookingDtoForItem nextBooking;
     private List<CommentDtoResponse> comments;

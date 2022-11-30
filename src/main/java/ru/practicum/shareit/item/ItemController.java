@@ -38,16 +38,23 @@ public class ItemController {
     }
 
     @GetMapping
-    public Collection<ItemDto> getItemCreator(@RequestHeader("X-Sharer-User-Id") long userId) {
-        return itemService.getItemsCreator(userId);
+    public Collection<ItemDto> getItemCreator(@RequestHeader("X-Sharer-User-Id") long userId,
+                                              @RequestParam(required = false, defaultValue = "0") int from,
+                                              @RequestParam(required = false, defaultValue = "10") int size) {
+
+
+        return itemService.getItemsCreator(userId, from, size);
     }
 
     @GetMapping("search")
 
     public Collection<ItemDto> findItem(@Valid
                                         @RequestHeader("X-Sharer-User-Id") long userId,
-                                        @RequestParam String text) {
-        return itemService.findItem(text, userId);
+                                        @RequestParam String text,
+                                        @RequestParam(required = false, defaultValue = "0") int from,
+                                        @RequestParam(required = false, defaultValue = "10") int size) {
+
+        return itemService.findItem(text, userId, from, size);
 
     }
 

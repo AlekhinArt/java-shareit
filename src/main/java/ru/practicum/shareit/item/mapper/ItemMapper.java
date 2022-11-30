@@ -9,12 +9,16 @@ import java.util.List;
 public class ItemMapper {
 
     public static ItemDto toItemDto(Item item) {
+        if (item.getRequestId() == null) {
+            item.setRequestId(0L);
+        }
         return ItemDto.builder()
                 .id(item.getId())
                 .name(item.getName())
                 .description((item.getDescription()))
                 .available(item.getAvailable())
                 .ownerId(item.getOwnerId())
+                .requestId(item.getRequestId())
                 .build();
     }
 

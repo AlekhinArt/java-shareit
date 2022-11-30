@@ -1,6 +1,8 @@
 package ru.practicum.shareit.item.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -10,6 +12,9 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 @ToString
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,9 +30,9 @@ public class Item {
     @NotNull
     private Boolean available;
     @Column(name = "owner_id")
+    @JsonProperty("owner")
     private Long ownerId;
     @Column(name = "request_id")
     private Long requestId;
-
 
 }

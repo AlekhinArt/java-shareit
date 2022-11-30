@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class BookingDtoWithUserAndItem {
 
-    private long id;
+    private Long id;
     @Future
     private LocalDateTime start;
     @Future

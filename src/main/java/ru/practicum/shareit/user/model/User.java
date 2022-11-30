@@ -14,6 +14,7 @@ import javax.validation.constraints.Positive;
 @NoArgsConstructor
 @Getter
 @Setter
+@Builder
 @Table(name = "users")
 public class User {
     @Id
