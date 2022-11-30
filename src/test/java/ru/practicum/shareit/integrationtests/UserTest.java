@@ -2,12 +2,14 @@ package ru.practicum.shareit.integrationtests;
 
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.shareit.exceptions.AnybodyUseEmailOrNameException;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.mapper.UserMapper;
 import ru.practicum.shareit.user.model.User;
@@ -30,7 +32,7 @@ public class UserTest {
 
 
     private final EntityManager entityManager;
-    private final UserService service;
+    private final UserService userService;
     private static User user;
 
     @BeforeEach
@@ -50,7 +52,7 @@ public class UserTest {
 
     @Test
     void saveUser() {
-        service.createUser(user);
+        userService.createUser(user);
 
         TypedQuery<User> query = entityManager.createQuery("Select u from User u where u.email = :email", User.class);
         User testUser = query.setParameter("email", user.getEmail()).getSingleResult();
@@ -61,10 +63,18 @@ public class UserTest {
     }
 
     @Test
+    void saveUserFailName() {
+        userService.createUser(user);
+        Assertions.assertThrows(
+                AnybodyUseEmailOrNameException.class,
+                () -> userService.createUser(new User(2L, user.getName(),user.getEmail())));
+    }
+
+    @Test
     void updateUser() {
-        UserDto testUser = service.createUser(user);
+        UserDto testUser = userService.createUser(user);
         testUser.setEmail("test2@test.ru");
-        service.updateUser(UserMapper.dtoToUser(testUser), testUser.getId());
+        userService.updateUser(UserMapper.dtoToUser(testUser), testUser.getId());
 
         TypedQuery<User> query = entityManager.createQuery("Select u from User u where u.id = :id", User.class);
         User user = query.setParameter("id", testUser.getId()).getSingleResult();
@@ -76,8 +86,8 @@ public class UserTest {
 
     @Test
     void findAll() {
-        service.createUser(user);
-        service.createUser(User.builder()
+        userService.createUser(user);
+        userService.createUser(User.builder()
                 .email("test2@test.ru")
                 .name("test2").build());
 
@@ -89,7 +99,7 @@ public class UserTest {
 
     @Test
     void findById() {
-        UserDto testUser = service.createUser(user);
+        UserDto testUser = userService.createUser(user);
 
         TypedQuery<User> query = entityManager.createQuery("Select u from User u where u.id = :id", User.class);
         User user = query.setParameter("id", testUser.getId()).getSingleResult();

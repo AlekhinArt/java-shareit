@@ -16,6 +16,8 @@ import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.BookingStatus;
 import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.comment.dto.CommentDto;
+import ru.practicum.shareit.comment.dto.CommentDtoResponse;
+import ru.practicum.shareit.comment.mapper.CommentMapper;
 import ru.practicum.shareit.comment.model.Comment;
 import ru.practicum.shareit.comment.repository.CommentRepository;
 import ru.practicum.shareit.exceptions.NotFoundException;
@@ -80,6 +82,13 @@ public class ItemTest {
             .item(new Item())
             .booker(new User())
             .bookingStatus(BookingStatus.APPROVED)
+            .build();
+    private static Comment comment = Comment.builder()
+            .id(1L)
+            .text("test")
+            .author(user)
+            .created(LocalDateTime.now())
+            .item(item)
             .build();
 
     @BeforeEach
@@ -259,5 +268,13 @@ public class ItemTest {
 
     }
 
+    @Test
+    void mapperToCommentDtoResponse() {
+        CommentDtoResponse commentDtoResponse = CommentMapper.toCommentDtoResponse(comment);
+        Assertions.assertEquals(commentDtoResponse.getText(), comment.getText());
+        Assertions.assertEquals(commentDtoResponse.getId(), comment.getId());
+        Assertions.assertEquals(commentDtoResponse.getAuthor(), comment.getAuthor().getName());
+        Assertions.assertEquals(commentDtoResponse.getCreated(), comment.getCreated());
+    }
 
 }

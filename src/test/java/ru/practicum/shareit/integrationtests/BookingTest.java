@@ -2,6 +2,7 @@ package ru.practicum.shareit.integrationtests;
 
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,8 @@ import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.BookingState;
 import ru.practicum.shareit.booking.model.BookingStatus;
 import ru.practicum.shareit.booking.service.BookingService;
+import ru.practicum.shareit.exceptions.AnybodyUseEmailOrNameException;
+import ru.practicum.shareit.exceptions.UnsupportedStatusException;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.service.ItemService;
@@ -186,6 +189,21 @@ public class BookingTest {
         assertThat(bookings.size(), equalTo(0));
         bookings = bookingService.getBookingsItemOwner(BookingState.CURRENT.name(), ownerDto.getId(), 1, 10);
         assertThat(bookings.size(), equalTo(1));
+    }
+
+    @Test
+    void getBookingsUserUnSupportedStatus() {
+        UserDto ownerDto = userService.createUser(owner);
+        UserDto bookerDto = userService.createUser(booker);
+        item.setOwnerId(ownerDto.getId());
+        ItemDto getItem = itemService.addNewItem(ownerDto.getId(), item);
+        booking.setBookerId(bookerDto.getId());
+        booking.setItemId(getItem.getId());
+        bookingService.createBooking(booking, bookerDto.getId());
+
+        final UnsupportedStatusException exception = Assertions.assertThrows(
+                UnsupportedStatusException.class,
+                () -> bookingService.getBookingsUser("WEWE", bookerDto.getId(), 1, 10));
     }
 
 }
