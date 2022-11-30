@@ -143,7 +143,7 @@ public class RequestTest {
                 .description("test description")
                 .ownerId(1L)
                 .available(true)
-                .requestId(1L)
+                .requestId(getRequest.getId())
                 .build();
         itemService.addNewItem(getUser.getId(), testItem);
         ItemRequestDto request = itemRequestService.getRequest(getRequest.getId(), getUser.getId());
