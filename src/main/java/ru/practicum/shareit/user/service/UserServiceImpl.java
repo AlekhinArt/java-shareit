@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
         if (user.getEmail() == null) user.setEmail(oldUser.getEmail());
         user.setId(id);
         try {
-            UserMapper.toUserDto(userRepository.save(user));
+            userRepository.save(user);
         } catch (Exception e) {
             throw new AnybodyUseEmailOrNameException("имя или email");
         }

@@ -7,11 +7,9 @@ import ru.practicum.shareit.comment.dto.CommentDtoResponse;
 
 import java.util.List;
 
-
 @Setter
 @Getter
 @AllArgsConstructor
-@NoArgsConstructor
 @Builder
 public class ItemDto {
     private Long id;

@@ -7,12 +7,10 @@ import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
 
-@ToString
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@Setter
 @Builder
 @Table(name = "requests")
 public class ItemRequest {

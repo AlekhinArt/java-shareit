@@ -11,7 +11,6 @@ import javax.validation.constraints.NotNull;
 @Table(name = "items")
 @Getter
 @Setter
-@ToString
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
