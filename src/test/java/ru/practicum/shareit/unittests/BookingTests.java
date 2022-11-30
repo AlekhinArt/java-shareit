@@ -8,13 +8,11 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.TestPropertySource;
 import ru.practicum.shareit.booking.dto.BookingDto;
-import ru.practicum.shareit.booking.dto.BookingDtoForItem;
 import ru.practicum.shareit.booking.dto.BookingDtoWithUserAndItem;
 import ru.practicum.shareit.booking.mapper.BookingMapper;
 import ru.practicum.shareit.booking.model.Booking;
@@ -110,7 +108,7 @@ public class BookingTests {
     void create() {
         Mockito.when(mockBookingRepository.save(any(Booking.class)))
                 .thenReturn(booking);
-        BookingDtoWithUserAndItem dto = bookingService.createBooking(bookingDto, 2l);
+        BookingDtoWithUserAndItem dto = bookingService.createBooking(bookingDto, 2L);
         Assertions.assertEquals(dto.getId(), booking.getId());
         Assertions.assertEquals(dto.getBooker().getId(), booking.getBooker().getId());
         Assertions.assertEquals(dto.getItem().getId(), booking.getItem().getId());
@@ -145,7 +143,7 @@ public class BookingTests {
     void update() {
         Mockito.when(mockBookingRepository.save(any(Booking.class)))
                 .thenReturn(booking);
-        BookingDtoWithUserAndItem dto = bookingService.approvalBooking(true, 1L, 1l);
+        BookingDtoWithUserAndItem dto = bookingService.approvalBooking(true, 1L, 1L);
         Assertions.assertEquals(dto.getId(), booking.getId());
     }
 

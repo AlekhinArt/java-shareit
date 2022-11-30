@@ -66,7 +66,7 @@ public class ItemRequestTest {
                 .id(1L)
                 .name("testItem")
                 .description("test item description")
-                .ownerId(1l)
+                .ownerId(1L)
                 .available(true)
                 .requestId(0L)
                 .build();
@@ -101,7 +101,7 @@ public class ItemRequestTest {
                 .thenReturn(Optional.empty());
         Assertions.assertThrows(
                 NotFoundException.class,
-                () -> itemRequestService.createRequest(itemRequestDto, 0L )
+                () -> itemRequestService.createRequest(itemRequestDto, 0L)
         );
     }
 
@@ -112,22 +112,22 @@ public class ItemRequestTest {
                 .thenReturn(Optional.empty());
         Assertions.assertThrows(
                 NotFoundException.class,
-                () -> itemRequestService.createRequest( itemRequestDto, 10L)
+                () -> itemRequestService.createRequest(itemRequestDto, 10L)
         );
 
     }
 
     @Test
     void getRequestsOk() {
-        Mockito                .when(mockItemRequestRepository.findByRequestor(anyLong()))
+        Mockito.when(mockItemRequestRepository.findByRequestor(anyLong()))
                 .thenReturn(List.of(itemRequest));
-        Collection <ItemRequestDto> dtos = itemRequestService.getRequests(1L);
+        Collection<ItemRequestDto> dtos = itemRequestService.getRequests(1L);
         Assertions.assertEquals(dtos.size(), 1);
     }
 
     @Test
     void getRequestsEmpty() {
-        Mockito                .when(mockItemRequestRepository.findByRequestor(anyLong()))
+        Mockito.when(mockItemRequestRepository.findByRequestor(anyLong()))
                 .thenReturn(Collections.emptyList());
         Collection<ItemRequestDto> dtos = itemRequestService.getRequests(1L);
         Assertions.assertEquals(dtos.size(), 0);

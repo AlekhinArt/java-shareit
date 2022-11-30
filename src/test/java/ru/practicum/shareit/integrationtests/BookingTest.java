@@ -85,15 +85,15 @@ public class BookingTest {
     @Test
     void createBooking() {
         UserDto ownerDto = userService.createUser(owner);
-        UserDto BookerDto = userService.createUser(booker);
+        UserDto bookerDto = userService.createUser(booker);
         item.setOwnerId(ownerDto.getId());
         ItemDto getItem = itemService.addNewItem(ownerDto.getId(), item);
-        booking.setBookerId(BookerDto.getId());
+        booking.setBookerId(bookerDto.getId());
         booking.setItemId(getItem.getId());
-        bookingService.createBooking(booking, BookerDto.getId());
+        bookingService.createBooking(booking, bookerDto.getId());
 
         TypedQuery<Booking> query = entityManager.createQuery("Select b from Booking b where b.booker.id = :id", Booking.class);
-        Booking booking = query.setParameter("id", BookerDto.getId()).getSingleResult();
+        Booking booking = query.setParameter("id", bookerDto.getId()).getSingleResult();
 
         assertThat(booking.getId(), notNullValue());
         assertThat(booking.getBookingStatus(), equalTo(BookingTest.booking.getStatus()));

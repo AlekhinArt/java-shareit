@@ -62,6 +62,7 @@ public class UserTest {
         Assertions.assertEquals(getUser.getName(), userDto.getName());
         Assertions.assertEquals(getUser.getEmail(), userDto.getEmail());
     }
+
     @Test
     void getFailId() {
         Mockito
@@ -91,7 +92,7 @@ public class UserTest {
         Mockito
                 .when(mockUserRepository.save(any(User.class)))
                 .thenReturn(user);
-        UserDto getUser = userService.updateUser( new User(), 1L);
+        UserDto getUser = userService.updateUser(new User(), 1L);
         Assertions.assertEquals(getUser.getName(), userDto.getName());
     }
 
