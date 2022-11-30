@@ -329,5 +329,15 @@ public class BookingTests {
         Assertions.assertEquals(getBooking.getId(), booking.getId());
     }
 
+    @Test
+    void example() {
+        BookingDtoWithUserAndItem bookingDtoWithUserAndItem = new BookingDtoWithUserAndItem();
+        Assertions.assertNull(bookingDtoWithUserAndItem.getId());
+        Assertions.assertNull(bookingDtoWithUserAndItem.getItem());
+        Assertions.assertNull(bookingDtoWithUserAndItem.getBooker());
+        Assertions.assertNull(bookingDtoWithUserAndItem.getStatus());
+        Assertions.assertNull(bookingDtoWithUserAndItem.getStart());
+        Assertions.assertNull(bookingDtoWithUserAndItem.getEnd());
 
+    }
 }
