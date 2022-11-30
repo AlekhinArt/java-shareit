@@ -23,5 +23,9 @@ public class ErrorResponseTest {
         Assertions.assertNotNull(errorResponse.getError());
     }
 
+    @Test
+    void getAnyError(){
+
+    }
 
 }

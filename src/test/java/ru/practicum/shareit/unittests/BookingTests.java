@@ -330,7 +330,7 @@ public class BookingTests {
     }
 
     @Test
-    void example() {
+    void bookingDtoWithUserAndItemTestGet() {
         BookingDtoWithUserAndItem bookingDtoWithUserAndItem = new BookingDtoWithUserAndItem();
         Assertions.assertNull(bookingDtoWithUserAndItem.getId());
         Assertions.assertNull(bookingDtoWithUserAndItem.getItem());
@@ -340,4 +340,21 @@ public class BookingTests {
         Assertions.assertNull(bookingDtoWithUserAndItem.getEnd());
 
     }
+
+    @Test
+    void bookingDtoWithUserAndItemTestSet() {
+        BookingDtoWithUserAndItem bookingDtoWithUserAndItem = new BookingDtoWithUserAndItem();
+        bookingDtoWithUserAndItem.setId(1L);
+        bookingDtoWithUserAndItem.setStatus(BookingStatus.WAITING);
+        bookingDtoWithUserAndItem.setItem(item);
+        bookingDtoWithUserAndItem.setBooker(UserMapper.dtoToUser(booker));
+
+        Assertions.assertEquals(bookingDtoWithUserAndItem.getId(), 1L);
+        Assertions.assertEquals(bookingDtoWithUserAndItem.getStatus(), BookingStatus.WAITING);
+        Assertions.assertEquals(bookingDtoWithUserAndItem.getItem().getName(), item.getName());
+        Assertions.assertEquals(bookingDtoWithUserAndItem.getBooker().getName(), booker.getName());
+
+    }
+
+
 }
