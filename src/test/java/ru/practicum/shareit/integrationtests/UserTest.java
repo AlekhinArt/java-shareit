@@ -67,7 +67,10 @@ public class UserTest {
         userService.createUser(user);
         Assertions.assertThrows(
                 AnybodyUseEmailOrNameException.class,
-                () -> userService.createUser(new User(2L, user.getName(), user.getEmail())));
+                () -> userService.createUser(User.builder()
+                        .name(user.getName())
+                        .email(user.getEmail())
+                        .build()));
     }
 
     @Test
