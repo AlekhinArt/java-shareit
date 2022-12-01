@@ -57,7 +57,6 @@ public class ItemRequestServiceImpl implements ItemRequestService {
 
     @Override
     public Collection<ItemRequestDto> getAllRequest(Long userId, int from, int size) {
-        System.out.println("PNX");
         getUser(userId);
         checkPageParam(from, size);
         Pageable pageable = PageRequest.of(from, size, Sort.by("created").descending());
