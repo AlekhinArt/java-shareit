@@ -115,6 +115,16 @@ public class UserTest {
                 .deleteById(Mockito.anyLong());
     }
 
+    @Test
+    void deleteUserNotFound() {
+        Mockito.doThrow(NotFoundException.class)
+                .when(mockUserRepository).deleteById(Mockito.anyLong());
+        Assertions.assertThrows(
+                NotFoundException.class,
+                () -> userService.deleteUser(1L));
+
+    }
+
 
     @Test
     void mapperToUser() {
