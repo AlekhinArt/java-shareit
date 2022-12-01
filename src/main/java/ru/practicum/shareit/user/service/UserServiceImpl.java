@@ -48,18 +48,25 @@ public class UserServiceImpl implements UserService {
     public UserDto updateUser(User user, long id) {
         User oldUser = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
-        checkUser(user);
         if (user.getName() == null) user.setName(oldUser.getName());
         if (user.getEmail() == null) user.setEmail(oldUser.getEmail());
         user.setId(id);
-        return UserMapper.toUserDto(userRepository.save(user));
+        try {
+            userRepository.save(user);
+        } catch (Exception e) {
+            throw new AnybodyUseEmailOrNameException("имя или email");
+        }
+        return UserMapper.toUserDto(user);
+
     }
 
     @Override
     public void deleteUser(Long id) {
-        userRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
-        userRepository.deleteById(id);
+        try {
+            userRepository.deleteById(id);
+        } catch (Exception e) {
+            throw new NotFoundException("Пользователь не найден");
+        }
     }
 
     private void checkUser(User user) {

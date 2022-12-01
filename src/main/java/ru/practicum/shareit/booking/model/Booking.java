@@ -7,9 +7,6 @@ import ru.practicum.shareit.user.model.User;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-/**
- * TODO Sprint add-bookings.
- */
 @Setter
 @Getter
 @Entity
@@ -20,7 +17,7 @@ import java.time.LocalDateTime;
 public class Booking {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column (name = "booking_id")
+    @Column(name = "booking_id")
     private Long id;
     @Column(name = "start_date")
     private LocalDateTime start;
@@ -33,7 +30,7 @@ public class Booking {
     @JoinColumn(name = "booker_id")
     private User booker;
     @Enumerated(EnumType.STRING)
-    @Column (name = "status")
+    @Column(name = "status")
     private BookingStatus bookingStatus;
 
 }

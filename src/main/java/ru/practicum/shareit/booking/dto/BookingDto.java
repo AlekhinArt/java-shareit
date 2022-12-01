@@ -1,5 +1,6 @@
 package ru.practicum.shareit.booking.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,21 +10,19 @@ import ru.practicum.shareit.booking.model.BookingStatus;
 import javax.validation.constraints.Future;
 import java.time.LocalDateTime;
 
-/**
- * TODO Sprint add-bookings.
- */
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class BookingDto {
-    private long id;
+    private Long id;
     @Future
     private LocalDateTime start;
     @Future
     private LocalDateTime end;
-    private long bookerId;
-    private long itemId;
+    @JsonProperty("booker")
+    private Long bookerId;
+    private Long itemId;
     private String itemName;
     private BookingStatus status;
 }

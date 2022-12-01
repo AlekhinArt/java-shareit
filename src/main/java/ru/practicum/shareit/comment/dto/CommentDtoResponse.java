@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CommentDtoResponse {
-    private long id;
+    private Long id;
     private String text;
     @JsonProperty("authorName")
     private String author;

@@ -8,12 +8,12 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Positive;
 
-@ToString
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
+@Builder
 @Table(name = "users")
 public class User {
     @Id
@@ -21,12 +21,10 @@ public class User {
     @Positive
     @Column(name = "user_id")
     private Long id;
-
     @Column(name = "user_name")
     @NotBlank(message = "Логин не может быть пустым.")
     @Pattern(regexp = "^[a-zA-Z0-9_]*$", message = "Логин не может содержать пробелы.")
     private String name;
-
     @Column
     @NotBlank(message = "Электронная почта не может быть пустой.")
     @Email(regexp = "\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*\\.\\w{2,4}",

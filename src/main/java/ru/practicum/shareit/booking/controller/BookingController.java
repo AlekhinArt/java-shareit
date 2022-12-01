@@ -10,9 +10,6 @@ import ru.practicum.shareit.exceptions.UnsupportedStatusException;
 import javax.validation.Valid;
 import java.util.Collection;
 
-/**
- * TODO Sprint add-bookings.
- */
 @RestController
 @RequestMapping(path = "/bookings")
 @AllArgsConstructor
@@ -40,15 +37,25 @@ public class BookingController {
 
     @GetMapping
     public Collection<BookingDtoWithUserAndItem> getBookingsUser(@RequestHeader("X-Sharer-User-Id") long userId,
-                                                                 @RequestParam(required = false, defaultValue = "ALL")
-                                                                 String state) throws UnsupportedStatusException {
-        return bookingService.getBookingsUser(state, userId);
+                                                                 @RequestParam(required = false,
+                                                                         defaultValue = "ALL") String state,
+                                                                 @RequestParam(required = false,
+                                                                         defaultValue = "0") int from,
+                                                                 @RequestParam(required = false,
+                                                                         defaultValue = "10") int size) {
+
+
+        return bookingService.getBookingsUser(state, userId, from, size);
     }
 
     @GetMapping("/owner")
     public Collection<BookingDtoWithUserAndItem> getBookingsItemOwner(@RequestHeader("X-Sharer-User-Id") long ownerId,
-                                                                      @RequestParam(required = false, defaultValue = "ALL")
-                                                                      String state) throws UnsupportedStatusException {
-        return bookingService.getBookingsItemOwner(state, ownerId);
+                                                                      @RequestParam(required = false,
+                                                                              defaultValue = "ALL") String state,
+                                                                      @RequestParam(required = false,
+                                                                              defaultValue = "0") int from,
+                                                                      @RequestParam(required = false,
+                                                                              defaultValue = "10") int size) throws UnsupportedStatusException {
+        return bookingService.getBookingsItemOwner(state, ownerId, from, size);
     }
 }

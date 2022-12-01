@@ -1,18 +1,30 @@
 package ru.practicum.shareit.request;
 
-import lombok.Data;
-import ru.practicum.shareit.user.model.User;
+import lombok.*;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
-/**
- * TODO Sprint add-item-requests.
- */
-@Data
+
+@Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Builder
+@Setter
+@Table(name = "requests")
 public class ItemRequest {
-    private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "request_id")
+    private Long requestId;
+    @Column
+    @NotBlank(message = "Описание не может быть пустым.")
     private String description;
-    private User requestor;
+    @Column(name = "requestor_id")
+    private Long requestor;
+    @Column(name = "created")
     private LocalDateTime created;
 
 }

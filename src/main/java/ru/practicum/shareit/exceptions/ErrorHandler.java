@@ -24,14 +24,6 @@ public class ErrorHandler {
     }
 
     @ExceptionHandler
-    @ResponseStatus(HttpStatus.FORBIDDEN)
-    public ErrorResponse noAccessException(final NoAccessException e) {
-        return new ErrorResponse("Нет доступа к предмету " +
-                e.getMessage()
-        );
-    }
-
-    @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorResponse anybodyUseEmailOrNameException(final AnybodyUseEmailOrNameException e) {
         return new ErrorResponse("Кто-то уже использует " + e.getMessage());
