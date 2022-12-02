@@ -24,12 +24,6 @@ public class ErrorHandler {
     }
 
     @ExceptionHandler
-    @ResponseStatus(HttpStatus.CONFLICT)
-    public ErrorResponse anybodyUseEmailOrNameException(final AnybodyUseEmailOrNameException e) {
-        return new ErrorResponse("Кто-то уже использует " + e.getMessage());
-    }
-
-    @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse unsupportedStatusException(final UnsupportedStatusException e) {
         return new ErrorResponse("Unknown state: " +

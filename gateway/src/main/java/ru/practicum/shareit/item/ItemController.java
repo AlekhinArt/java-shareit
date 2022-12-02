@@ -85,7 +85,6 @@ public class ItemController {
             log.debug("Uncorrected id: {}", userId);
             throw new NotFoundException("Uncorrected id " + userId);
         }
-
     }
 
     private void checkItem(ItemDto itemDto) {

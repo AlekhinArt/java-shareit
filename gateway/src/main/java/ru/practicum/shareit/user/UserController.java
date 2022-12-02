@@ -46,7 +46,7 @@ public class UserController {
 
     @PatchMapping("{id}")
     public ResponseEntity<Object> update(@RequestBody UserDto user, @PathVariable long id) {
-        log.info("update userId : {}, update user {}",id, user);
+        log.info("update userId : {}, update user {}", id, user);
         checkId(id);
         return userClient.update(user, id);
     }
@@ -58,7 +58,7 @@ public class UserController {
         userClient.deleteUser(id);
     }
 
-    private void checkId(long id){
+    private void checkId(long id) {
         if (id <= 0) {
             log.debug("Uncorrected id: {}", id);
             throw new NotFoundException("Uncorrected id " + id);
