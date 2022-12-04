@@ -6,8 +6,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class ShareItServer {
 
-	public static void main(String[] args) {
-		SpringApplication.run(ShareItServer.class, args);
-	}
+    public static void main(String[] args) {
+        System.getProperties().put("server.port", 9090);
+        SpringApplication.run(ShareItServer.class, args);
+    }
 
 }

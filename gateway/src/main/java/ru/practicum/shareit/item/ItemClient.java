@@ -50,7 +50,7 @@ public class ItemClient extends BaseClient {
                 "size", size);
 
 
-        return get("?from={from}&size={size}" + userId, parameters);
+        return get("?from={from}&size={size}", userId, parameters);
     }
 
     public ResponseEntity<Object> findItem(long userId, String text, int from, int size) {
@@ -58,7 +58,7 @@ public class ItemClient extends BaseClient {
                 "from", from,
                 "size", size);
 
-        return get("/search?text=" + text.toLowerCase() + "&from={from}&size={size}" + userId, parameters);
+        return get("/search?text=" + text.toLowerCase() + "&from={from}&size={size}", userId, parameters);
 
     }
 

@@ -1,5 +1,6 @@
 package ru.practicum.shareit.item.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -25,6 +26,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class ItemServiceImpl implements ItemService {
     private final UserRepository userRepository;
@@ -45,6 +47,7 @@ public class ItemServiceImpl implements ItemService {
     public ItemDto addNewItem(long userId, Item item) {
         checkUser(userId);
         item.setOwnerId(userId);
+        log.info("addNewItem: {}", item);
         return ItemMapper.toItemDto(itemRepository.save(item));
     }
 
@@ -60,20 +63,22 @@ public class ItemServiceImpl implements ItemService {
         if (item.getDescription() == null) item.setDescription(oldItem.getDescription());
         if (item.getAvailable() == null) item.setAvailable(oldItem.getAvailable());
         item.setId(oldItem.getId());
+        log.info("updateItem: {}", item);
         return ItemMapper.toItemDto(itemRepository.save(item));
     }
 
     @Override
     public ItemDto getItem(long userId, long itemId) {
         checkUser(userId);
+        log.info("getItem userid: {}, itemId: {} ", userId, itemId);
         return itemRepository.getByIdForResponse(userId, itemId);
     }
 
     @Override
     public Collection<ItemDto> getItemsCreator(long userId, int from, int size) {
         checkUser(userId);
-        checkPageParam(from, size);
         Pageable pageable = PageRequest.of(from / size, size);
+        log.info("getItemsCreator userid: {}, from: {}, size: {} ", userId, from, size);
         return itemRepository.findIdByOwner(userId, pageable).stream().map(id
                 -> itemRepository.getByIdForResponse(userId, id)).collect(Collectors.toList());
     }
@@ -81,9 +86,8 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public Collection<ItemDto> findItem(String description, long userId, int from, int size) {
         if (description.isBlank() || description.isEmpty()) return new ArrayList<>();
-        checkPageParam(from, size);
-        //checkUser(userId);
         Pageable pageable = PageRequest.of(from / size, size);
+        log.info("findItem description: {}, userid: {}, from: {}, size: {} ", description, userId, from, size);
         return ItemMapper.mapToItemDto(itemRepository.search(description, pageable));
     }
 
@@ -102,21 +106,15 @@ public class ItemServiceImpl implements ItemService {
                 .item(item)
                 .created(LocalDateTime.now())
                 .build();
+        log.info("AddComment userid: {}, itemId: {}, commentDto: {}", userId, itemId, comment);
         return CommentMapper.toCommentDtoResponse(commentRepository.save(comment));
     }
 
-    private void checkPageParam(int from, int size) {
-        if (from < 0) {
-            throw new ValidationException("Индекс первого элемента должен быть больше 0");
-        }
-        if (size <= 0) {
-            throw new ValidationException("Количество предметов должно быть больше 0");
-        }
-    }
-
     private void checkUser(long userId) {
-        if (userId == 0) throw new ValidationException("Не задан пользователь");
-        if (userRepository.findById(userId).isEmpty()) throw new NotFoundException("Пользователь не найден");
+        if (userRepository.findById(userId).isEmpty()) {
+            log.debug("checkUser.NotFoundException(Пользователь не найден");
+            throw new NotFoundException("Пользователь не найден");
+        }
     }
 
 }

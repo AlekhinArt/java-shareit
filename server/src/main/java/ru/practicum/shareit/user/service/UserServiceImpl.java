@@ -1,5 +1,6 @@
 package ru.practicum.shareit.user.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.exceptions.AnybodyUseEmailOrNameException;
@@ -12,6 +13,7 @@ import ru.practicum.shareit.user.repository.UserRepository;
 import java.util.Collection;
 import java.util.List;
 
+@Slf4j
 @Service
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
@@ -24,11 +26,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public Collection<UserDto> getAllUsers() {
         List<User> users = userRepository.findAll();
+        log.info("getAllUsers");
         return UserMapper.mapToUserDto(users);
     }
 
     @Override
     public UserDto getUser(Long id) {
+        log.info("getUser id: {}", id);
         return UserMapper.toUserDto(userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден")));
     }
@@ -41,6 +45,7 @@ public class UserServiceImpl implements UserService {
         } catch (Exception e) {
             throw new AnybodyUseEmailOrNameException("имя или email");
         }
+        log.info("createUser user: {}", user);
         return UserMapper.toUserDto(newUser);
     }
 
@@ -54,8 +59,10 @@ public class UserServiceImpl implements UserService {
         try {
             userRepository.save(user);
         } catch (Exception e) {
+            log.debug("updateUser.AnybodyUseEmailOrNameException(имя или email)");
             throw new AnybodyUseEmailOrNameException("имя или email");
         }
+        log.info("updateUser user: {}", user);
         return UserMapper.toUserDto(user);
 
     }
@@ -63,21 +70,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(Long id) {
         try {
+            log.info("deleteUser id: {}", id);
             userRepository.deleteById(id);
         } catch (Exception e) {
+            log.debug("updateUser.NotFoundException(Пользователь не найден)");
             throw new NotFoundException("Пользователь не найден");
         }
     }
 
-    private void checkUser(User user) {
-        Collection<User> oldUsers = userRepository.findAll();
-        for (User oldUser : oldUsers) {
-            if (oldUser.getName().equals(user.getName())) {
-                throw new AnybodyUseEmailOrNameException("это имя: " + user.getName());
-            }
-            if (oldUser.getEmail().equals(user.getEmail())) {
-                throw new AnybodyUseEmailOrNameException("этот Email: " + user.getEmail());
-            }
-        }
-    }
 }

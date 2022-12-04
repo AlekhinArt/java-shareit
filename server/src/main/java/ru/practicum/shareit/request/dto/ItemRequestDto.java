@@ -1,11 +1,10 @@
 package ru.practicum.shareit.request.dto;
 
-import java.util.Collection;
-
 import lombok.*;
 import ru.practicum.shareit.item.dto.ItemDto;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 
 @Builder
 @AllArgsConstructor

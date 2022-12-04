@@ -6,7 +6,6 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 import ru.practicum.shareit.client.BaseClient;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
@@ -38,8 +37,8 @@ public class ItemRequestClient extends BaseClient {
         return get("", userId);
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<Object> getAllRequests(@RequestHeader("X-Sharer-User-Id") long userId, int from, int size) {
+
+    public ResponseEntity<Object> getAllRequests(long userId, int from, int size) {
         Map<String, Object> parameters = Map.of(
                 "from", from,
                 "size", size
@@ -48,7 +47,7 @@ public class ItemRequestClient extends BaseClient {
     }
 
     public ResponseEntity<Object> getRequest(long userId, long requestId) {
-        return get("" + requestId, userId);
+        return get("/" + requestId, userId);
     }
 
 }

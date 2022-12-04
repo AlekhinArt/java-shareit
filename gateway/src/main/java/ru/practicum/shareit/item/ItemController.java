@@ -53,7 +53,7 @@ public class ItemController {
                                                  @RequestParam(required = false, defaultValue = "10") int size) {
         log.info("GetItemCreator userId: {}, from: {}, size: {}", userId, from, size);
         checkUserId(userId);
-        checkPageParam(from,size);
+        checkPageParam(from, size);
         return itemClient.getItemCreator(userId, from, size);
     }
 
@@ -64,8 +64,8 @@ public class ItemController {
                                            @RequestParam String text,
                                            @RequestParam(required = false, defaultValue = "0") int from,
                                            @RequestParam(required = false, defaultValue = "10") int size) {
-        log.info("FindItem userId: {}, from: {}, size: {}, text: {}", userId, from, size , text);
-        checkPageParam(from,size);
+        log.info("FindItem userId: {}, from: {}, size: {}, text: {}", userId, from, size, text);
+        checkPageParam(from, size);
         checkUserId(userId);
         return itemClient.findItem(userId, text, from, size);
 

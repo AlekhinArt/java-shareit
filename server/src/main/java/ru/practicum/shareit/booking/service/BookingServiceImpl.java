@@ -1,6 +1,7 @@
 package ru.practicum.shareit.booking.service;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -13,7 +14,9 @@ import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.BookingState;
 import ru.practicum.shareit.booking.model.BookingStatus;
 import ru.practicum.shareit.booking.repository.BookingRepository;
-import ru.practicum.shareit.exceptions.*;
+import ru.practicum.shareit.exceptions.NotFoundException;
+import ru.practicum.shareit.exceptions.UnsupportedStatusException;
+import ru.practicum.shareit.exceptions.ValidationException;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.user.mapper.UserMapper;
@@ -21,13 +24,13 @@ import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.service.UserService;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class BookingServiceImpl implements BookingService {
     private final BookingRepository bookingRepository;
     private final UserService userService;
@@ -38,18 +41,22 @@ public class BookingServiceImpl implements BookingService {
         Item item = getItem(bookingDto.getItemId());
         User user = getUser(userId);
         if (userId.equals(item.getOwnerId())) {
+            log.debug("createBooking.NotFoundException.Нельзя забронировать свою вещь");
             throw new NotFoundException("Ошибка! Нельзя забронировать свою вещь!");
         }
         if (!item.getAvailable()) {
+            log.debug("createBooking.ValidationException.Вещь не доступна для броинрования");
             throw new ValidationException("Вещь не доступна для броинрования");
         }
         if (bookingDto.getStart().isAfter(bookingDto.getEnd())) {
+            log.debug("createBooking.ValidationException.Не корректное время");
             throw new ValidationException("Время окончания бронирования должно быть позже времени начала бронирования");
         }
         Booking booking = BookingMapper.toBooking(bookingDto);
         booking.setBookingStatus(BookingStatus.WAITING);
         booking.setBooker(user);
         booking.setItem(item);
+        log.info("createBooking booking: {}", booking);
         return BookingMapper.toBookingDtoWithUserAndItem(bookingRepository.save(booking));
     }
 
@@ -59,12 +66,15 @@ public class BookingServiceImpl implements BookingService {
         Item item = booking.getItem();
         User user = getUser(userId);
         if (!item.getOwnerId().equals(userId)) {
+            log.debug("approvalBooking.NotFoundException.Подтверждать статус может только создатель бронирования");
             throw new NotFoundException("Подтверждать статус может только создатель бронирования");
         }
         if (booking.getBookingStatus() == BookingStatus.APPROVED) {
+            log.debug("approvalBooking.NotFoundException.Бронирование уже подтверждено");
             throw new ValidationException("Бронирование уже подтверждено");
         }
         booking.setBookingStatus(approved ? BookingStatus.APPROVED : BookingStatus.REJECTED);
+        log.info("approvalBooking booking: {}", booking);
         return BookingMapper.toBookingDtoWithUserAndItem(bookingRepository.save(booking));
     }
 
@@ -74,20 +84,19 @@ public class BookingServiceImpl implements BookingService {
         Item item = booking.getItem();
         User user = booking.getBooker();
         if (!user.getId().equals(userId) && !item.getOwnerId().equals(userId)) {
+            log.debug("getBooking.NotFoundException.Нет доступа");
             throw new NotFoundException("Нет доступа");
         }
+        log.info("getBooking userId: {}, bookingId: {}", userId, bookingId);
         return BookingMapper.toBookingDtoWithUserAndItem(booking);
     }
 
     @Override
     public Collection<BookingDtoWithUserAndItem> getBookingsUser(String stateString, Long userId, int from, int size) {
-        if (getUser(userId).getId() == null) throw new NotFoundException("Такого пользователя нет");
-        if (Arrays.stream(BookingState.values()).noneMatch((t) -> t.name().equals(stateString))) {
-            throw new UnsupportedStatusException(stateString);
+        if (getUser(userId).getId() == null) {
+            log.debug("getBookingsUser.NotFoundException.Такого пользователя нет");
+            throw new NotFoundException("Такого пользователя нет");
         }
-
-        checkPageParam(from, size);
-
         BookingState state = BookingState.valueOf(stateString);
         Page<Booking> bookings;
         Pageable pageable = PageRequest.of(from / size, size, Sort.by("start").descending());
@@ -118,6 +127,7 @@ public class BookingServiceImpl implements BookingService {
         if (bookings == null || bookings.isEmpty()) {
             return Collections.emptyList();
         }
+        log.info("getBookingsUser stateString: {}, userId: {}, from: {}, size: {}", state, userId, from, size);
         return bookings.stream()
                 .map(BookingMapper::toBookingDtoWithUserAndItem)
                 .collect(Collectors.toList());
@@ -125,11 +135,10 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public Collection<BookingDtoWithUserAndItem> getBookingsItemOwner(String stateString, Long ownerId, int from, int size) {
-        if (getUser(ownerId).getId() == null) throw new NotFoundException("Такого пользователя нет");
-        if (Arrays.stream(BookingState.values()).noneMatch((t) -> t.name().equals(stateString))) {
-            throw new UnsupportedStatusException(stateString);
+        if (getUser(ownerId).getId() == null) {
+            log.debug("getBookingsUser.NotFoundException.Такого пользователя нет");
+            throw new NotFoundException("Такого пользователя нет");
         }
-        checkPageParam(from, size);
         Page<Booking> bookings;
         Pageable pageable = PageRequest.of(from / size, size, Sort.by("start").descending());
         LocalDateTime time = LocalDateTime.now();
@@ -161,24 +170,16 @@ public class BookingServiceImpl implements BookingService {
         if (bookings == null || bookings.isEmpty()) {
             return Collections.emptyList();
         }
+        log.info("getBookingsItemOwner stateString: {}, ownerId: {}, from: {}, size: {}", state, ownerId, from, size);
         return bookings.stream()
                 .map(BookingMapper::toBookingDtoWithUserAndItem)
                 .collect(Collectors.toList());
 
     }
 
-    private void checkPageParam(int from, int size) {
-        if (from < 0) {
-            throw new ValidationException("Индекс первого элемента должен быть больше 0");
-        }
-        if (size <= 0) {
-            throw new ValidationException("Количество предметов должно быть больше 0");
-        }
-    }
 
     private User getUser(long userId) {
         userService.getUser(userId);
-
         return UserMapper.dtoToUser(userService.getUser(userId));
     }
 

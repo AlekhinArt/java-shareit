@@ -50,7 +50,7 @@ public class ItemRequestController {
         log.info("getRequest userId: {}, requestId: {}", userId, requestId);
         checkId(userId);
         checkId(requestId);
-        return itemRequestClient.getRequest(requestId, userId);
+        return itemRequestClient.getRequest(userId, requestId);
     }
 
     private void checkId(Long userId) {
