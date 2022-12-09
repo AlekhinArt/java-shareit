@@ -58,9 +58,9 @@ public class BookingController {
                                                  @RequestParam(name = "state", defaultValue = "ALL") BookingState state,
                                                  @PositiveOrZero @RequestParam(name = "from", defaultValue = "0") Integer from,
                                                  @Positive @RequestParam(name = "size", defaultValue = "10") Integer size) {
+
         log.info("Get booking by Owner with state {}, userId={}, from={}, size={}", state, userId, from, size);
         return bookingClient.getBookingsByOwner(userId, state, from, size);
     }
-
 
 }
