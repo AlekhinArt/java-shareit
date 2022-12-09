@@ -1,7 +1,5 @@
 package ru.practicum.shareit.booking.dto;
 
-import java.util.Optional;
-
 public enum BookingState {
 
     ALL,
@@ -10,5 +8,5 @@ public enum BookingState {
     PAST,
     REJECTED,
     WAITING;
-    
+
 }
