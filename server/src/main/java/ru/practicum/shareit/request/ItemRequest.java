@@ -3,7 +3,6 @@ package ru.practicum.shareit.request;
 import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
 
@@ -20,7 +19,6 @@ public class ItemRequest {
     @Column(name = "request_id")
     private Long requestId;
     @Column
-    @NotBlank(message = "Описание не может быть пустым.")
     private String description;
     @Column(name = "requestor_id")
     private Long requestor;

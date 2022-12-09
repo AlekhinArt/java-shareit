@@ -97,34 +97,41 @@ public class BookingTest {
 
     @Test
     void findAllByBooker_IdAndEndBefore() {
-        Page<Booking> bookings = bookingRepository.findAllByBooker_IdAndEndBefore(testBooker.getId(), LocalDateTime.now(), Pageable.unpaged());
+        Page<Booking> bookings = bookingRepository.findAllByBooker_IdAndEndBefore(testBooker.getId(),
+                LocalDateTime.now(), Pageable.unpaged());
         Assertions.assertEquals(bookings.getSize(), 0);
 
-        bookings = bookingRepository.findAllByBooker_IdAndEndBefore(testBooker.getId(), LocalDateTime.now().plusHours(2), Pageable.unpaged());
+        bookings = bookingRepository.findAllByBooker_IdAndEndBefore(testBooker.getId(),
+                LocalDateTime.now().plusHours(2), Pageable.unpaged());
         Assertions.assertEquals(bookings.getSize(), 1);
     }
 
     @Test
     void findAllByBooker_IdAndStartAfter() {
-        Page<Booking> bookings = bookingRepository.findAllByBooker_IdAndStartAfter(testBooker.getId(), LocalDateTime.now(), Pageable.unpaged());
+        Page<Booking> bookings = bookingRepository.findAllByBooker_IdAndStartAfter(testBooker.getId(),
+                LocalDateTime.now(), Pageable.unpaged());
         Assertions.assertEquals(bookings.getSize(), 0);
 
-        bookings = bookingRepository.findAllByBooker_IdAndStartAfter(testBooker.getId(), LocalDateTime.now().minusHours(2), Pageable.unpaged());
+        bookings = bookingRepository.findAllByBooker_IdAndStartAfter(testBooker.getId(),
+                LocalDateTime.now().minusHours(2), Pageable.unpaged());
         Assertions.assertEquals(bookings.getSize(), 1);
     }
 
     @Test
     void findAllByBooker_IdAndStartBeforeAndEndAfter() {
-        Page<Booking> bookings = bookingRepository.findAllByBooker_IdAndStartBeforeAndEndAfter(testBooker.getId(), LocalDateTime.now().plusMinutes(2), LocalDateTime.now().plusMinutes(3), Pageable.unpaged());
+        Page<Booking> bookings = bookingRepository.findAllByBooker_IdAndStartBeforeAndEndAfter(testBooker.getId(),
+                LocalDateTime.now().plusMinutes(2), LocalDateTime.now().plusMinutes(3), Pageable.unpaged());
         Assertions.assertEquals(bookings.getSize(), 1);
     }
 
     @Test
     void findAllByBooker_IdAndStatus() {
-        Page<Booking> bookings = bookingRepository.findAllByBooker_IdAndBookingStatus(testBooker.getId(), BookingStatus.REJECTED, Pageable.unpaged());
+        Page<Booking> bookings = bookingRepository.findAllByBooker_IdAndBookingStatus(testBooker.getId(),
+                BookingStatus.REJECTED, Pageable.unpaged());
         Assertions.assertEquals(bookings.getSize(), 0);
 
-        bookings = bookingRepository.findAllByBooker_IdAndBookingStatus(testBooker.getId(), BookingStatus.WAITING, Pageable.unpaged());
+        bookings = bookingRepository.findAllByBooker_IdAndBookingStatus(testBooker.getId(),
+                BookingStatus.WAITING, Pageable.unpaged());
         Assertions.assertEquals(bookings.getSize(), 1);
     }
 
@@ -139,34 +146,41 @@ public class BookingTest {
 
     @Test
     void findAllByOwnerIdAndEndBefore() {
-        Page<Booking> bookings = bookingRepository.findAllByOwnerIdAndEndBefore(testOwner.getId(), LocalDateTime.now(), Pageable.unpaged());
+        Page<Booking> bookings = bookingRepository.findAllByOwnerIdAndEndBefore(testOwner.getId(),
+                LocalDateTime.now(), Pageable.unpaged());
         Assertions.assertEquals(bookings.getSize(), 0);
 
-        bookings = bookingRepository.findAllByOwnerIdAndEndBefore(testOwner.getId(), LocalDateTime.now().plusHours(3), Pageable.unpaged());
+        bookings = bookingRepository.findAllByOwnerIdAndEndBefore(testOwner.getId(),
+                LocalDateTime.now().plusHours(3), Pageable.unpaged());
         Assertions.assertEquals(bookings.getSize(), 1);
     }
 
     @Test
     void findAllByItem_IdInAndStartAfter() {
-        Page<Booking> bookings = bookingRepository.findAllByOwnerIdAndStartAfter(testOwner.getId(), LocalDateTime.now(), Pageable.unpaged());
+        Page<Booking> bookings = bookingRepository.findAllByOwnerIdAndStartAfter(testOwner.getId(),
+                LocalDateTime.now(), Pageable.unpaged());
         Assertions.assertEquals(bookings.getSize(), 0);
 
-        bookings = bookingRepository.findAllByOwnerIdAndStartAfter(testOwner.getId(), LocalDateTime.now().minusHours(3), Pageable.unpaged());
+        bookings = bookingRepository.findAllByOwnerIdAndStartAfter(testOwner.getId(),
+                LocalDateTime.now().minusHours(3), Pageable.unpaged());
         Assertions.assertEquals(bookings.getSize(), 1);
     }
 
     @Test
     void findAllByItem_IdInAndStartBeforeAndEndAfter() {
-        Page<Booking> bookings = bookingRepository.findAllByOwnerIdAndStartBeforeAndEndAfter(testOwner.getId(), LocalDateTime.now().plusMinutes(5), LocalDateTime.now().plusMinutes(5), Pageable.unpaged());
+        Page<Booking> bookings = bookingRepository.findAllByOwnerIdAndStartBeforeAndEndAfter(testOwner.getId(),
+                LocalDateTime.now().plusMinutes(5), LocalDateTime.now().plusMinutes(5), Pageable.unpaged());
         Assertions.assertEquals(bookings.getSize(), 1);
     }
 
     @Test
     void findAllByOwnerIdAndBookingStatus() {
-        Page<Booking> bookings = bookingRepository.findAllByOwnerIdAndBookingStatus(testOwner.getId(), BookingStatus.REJECTED, Pageable.unpaged());
+        Page<Booking> bookings = bookingRepository.findAllByOwnerIdAndBookingStatus(testOwner.getId(),
+                BookingStatus.REJECTED, Pageable.unpaged());
         Assertions.assertEquals(bookings.getSize(), 0);
 
-        bookings = bookingRepository.findAllByOwnerIdAndBookingStatus(testOwner.getId(), BookingStatus.WAITING, Pageable.unpaged());
+        bookings = bookingRepository.findAllByOwnerIdAndBookingStatus(testOwner.getId(),
+                BookingStatus.WAITING, Pageable.unpaged());
         Assertions.assertEquals(bookings.getSize(), 1);
     }
 

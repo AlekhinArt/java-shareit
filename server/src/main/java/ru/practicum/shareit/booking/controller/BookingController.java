@@ -8,7 +8,6 @@ import ru.practicum.shareit.booking.dto.BookingDtoWithUserAndItem;
 import ru.practicum.shareit.booking.service.BookingService;
 import ru.practicum.shareit.exceptions.UnsupportedStatusException;
 
-import javax.validation.Valid;
 import java.util.Collection;
 
 @RestController
@@ -20,7 +19,7 @@ public class BookingController {
 
     @PostMapping
     public BookingDtoWithUserAndItem createBooking(@RequestHeader("X-Sharer-User-Id") long userId,
-                                                   @Valid @RequestBody BookingDto booking) {
+                                                   @RequestBody BookingDto booking) {
         log.info("Creating booking {}, userId={}", booking, userId);
         return bookingService.createBooking(booking, userId);
     }

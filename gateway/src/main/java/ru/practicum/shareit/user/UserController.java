@@ -3,17 +3,19 @@ package ru.practicum.shareit.user;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.exception.NotFoundException;
-import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.user.dto.UserDto;
+import ru.practicum.shareit.valid.Create;
+import ru.practicum.shareit.valid.Update;
 
-import javax.validation.Valid;
+import javax.validation.constraints.PositiveOrZero;
 
 @RestController
 @RequestMapping(path = "/users")
 @RequiredArgsConstructor
 @Slf4j
+@Validated
 public class UserController {
     private final UserClient userClient;
 
@@ -24,44 +26,28 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> createUser(@Valid @RequestBody UserDto user) {
+    public ResponseEntity<Object> createUser(@Validated(Create.class) @RequestBody UserDto user) {
         log.info("createUser user : {}", user);
-        if (user.getName() == null || user.getName().isBlank()) {
-            log.debug("Name is blank");
-            throw new ValidationException("Name is blank");
-        }
-        if (user.getEmail() == null || user.getEmail().isBlank()) {
-            log.debug("email is blank");
-            throw new ValidationException("email is blank.");
-        }
         return userClient.createUser(user);
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Object> getUser(@Valid @PathVariable long id) {
+    public ResponseEntity<Object> getUser(@PositiveOrZero @PathVariable long id) {
         log.info("getUser userId : {}", id);
-        checkId(id);
         return userClient.getUser(id);
     }
 
     @PatchMapping("{id}")
-    public ResponseEntity<Object> update(@RequestBody UserDto user, @PathVariable long id) {
+    public ResponseEntity<Object> update(@Validated(Update.class) @RequestBody UserDto user,
+                                         @PositiveOrZero @PathVariable long id) {
         log.info("update userId : {}, update user {}", id, user);
-        checkId(id);
         return userClient.update(user, id);
     }
 
     @DeleteMapping("{id}")
-    public void deleteUser(@Valid @PathVariable long id) {
+    public void deleteUser(@PositiveOrZero @PathVariable long id) {
         log.info("deleteUser userId: {}", id);
-        checkId(id);
         userClient.deleteUser(id);
     }
 
-    private void checkId(long id) {
-        if (id <= 0) {
-            log.debug("Uncorrected id: {}", id);
-            throw new NotFoundException("Uncorrected id " + id);
-        }
-    }
 }

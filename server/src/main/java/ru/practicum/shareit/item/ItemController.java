@@ -9,7 +9,6 @@ import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.service.ItemService;
 
-import javax.validation.Valid;
 import java.util.Collection;
 
 @Slf4j
@@ -21,7 +20,7 @@ public class ItemController {
 
     @PostMapping
     public ItemDto add(@RequestHeader("X-Sharer-User-Id") long userId,
-                       @Valid @RequestBody Item item) {
+                       @RequestBody Item item) {
         log.info("Add item: {} , userId: {}", item, userId);
         return itemService.addNewItem(userId, item);
     }
@@ -50,11 +49,11 @@ public class ItemController {
     }
 
     @GetMapping("search")
-    public Collection<ItemDto> findItem(@Valid
-                                        @RequestHeader("X-Sharer-User-Id") long userId,
-                                        @RequestParam String text,
-                                        @RequestParam(required = false, defaultValue = "0") int from,
-                                        @RequestParam(required = false, defaultValue = "10") int size) {
+    public Collection<ItemDto> findItem(
+            @RequestHeader("X-Sharer-User-Id") long userId,
+            @RequestParam String text,
+            @RequestParam(required = false, defaultValue = "0") int from,
+            @RequestParam(required = false, defaultValue = "10") int size) {
         log.info("FindItem userId: {}, from: {}, size: {}, text: {}", userId, from, size, text);
         return itemService.findItem(text, userId, from, size);
     }
@@ -62,7 +61,7 @@ public class ItemController {
     @PostMapping("{itemId}/comment")
     public CommentDtoResponse addComment(@RequestHeader("X-Sharer-User-Id") long userId,
                                          @PathVariable("itemId") long itemId,
-                                         @Valid @RequestBody CommentDto commentDto) {
+                                         @RequestBody CommentDto commentDto) {
         log.info("AddComment userId: {}, itemId: {}, Comment {}", userId, itemId, commentDto);
         return itemService.addComment(userId, itemId, commentDto);
     }
